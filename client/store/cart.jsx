@@ -29,7 +29,7 @@ function Cart() {
                     <Text className="text-black font-bold">รวม 200 บาท</Text>
                 </div>
                 <div className="flex justify-center pt-5">
-                    <button className="bg-[#D9F9FF]  p-10 py-3 w-max rounded-full border-black border">
+                    <button className="bg-[#D9F9FF]  p-10 py-3 w-max rounded-full border-black border" onClick={() => navigate('/order/information')}>
                         <Text className="text-black font-normal">สร้างออเดอร์</Text>
                     </button>
                 </div>
