@@ -1,21 +1,29 @@
 import { useState, useEffect } from 'react';
 import useGetUsers from '../hook/useGetUsers';
+import Text from './components/common/Text';
+import Header from './components/customer/Header';
+import ProductBox from './components/customer/ProductBox';
 
 function App() {
     const { users, loading, error, refetch } = useGetUsers();
 
-    if (loading) return <p>Loading users...</p>;
-    if (error) return <p>Error: {error}</p>;
+    if (error) return <Text className="text-red-500">Error: {error}</Text>;
 
     return (
-        <div style={{ padding: '20px' }}>
-            <h1>Users</h1>
-            <button onClick={refetch}>Refresh</button>
-            <ul>
-                {users.map(user => (
-                    <li key={user.id}>{user.username || user.uid}</li>
-                ))}
-            </ul>
+        <div className="bg-gray-200 text-white w-full h-screen py-5">
+            <div>
+                <Header />
+            </div>
+            <div className="text-center pt-5">
+                <Text className="text-black">เมนูภายในร้านค้า</Text>
+            </div>
+            <div className="justify-center pt-5">
+                <ProductBox/>
+                <ProductBox/>
+                <ProductBox/>
+                <ProductBox/>
+                <ProductBox/>
+            </div>
         </div>
     );
 }
