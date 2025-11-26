@@ -10,6 +10,9 @@
     "start": "NODE_ENV=production node server/index.js"
   },
   "dependencies": {
+    "@fontsource/lato": "^5.2.7",
+    "@fontsource/noto-sans-thai": "^5.2.8",
+    "@fontsource/sarabun": "^5.2.8",
     "axios": "^1.13.2",
     "clsx": "^2.1.1",
     "cors": "^2.8.5",

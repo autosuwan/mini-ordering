@@ -5,20 +5,22 @@ import ImageButton from "../common/ImageButton";
 
 export default function CartItems() {
     return (
-        <div className="border border-[#AAAAAA] px-5 py-2 flex justify-between items-center">
-            <div className="flex items-center gap-5">
-                <img
-                src={productImage}
-                alt="Product"
-                className="w-20 h-20 object-cover object-center"
-                />
-                <div className="flex-col">
-                    <Text className="text-lg text-black">ไก่ทอด x2</Text>
+        <div className="bg-white border-b border-gray-300 px-4 py-4 flex justify-between items-center">
+            <div className="flex items-center gap-4">
+                <div className="w-24 h-24 bg-gray-300 rounded-lg flex-shrink-0">
+                    <img
+                        src={productImage}
+                        alt="Product"
+                        className="w-full h-full object-cover object-center rounded-lg"
+                    />
+                </div>
+                <div className="flex flex-col">
+                    <Text className="text-base font-normal text-black">ฮิโอะบัง x2</Text>
                     <Text className="text-sm text-black">200 บาท</Text>
                 </div>
             </div>
-            <div className="flex">
-                <ImageButton src={removeIcon} width={30} height={10} onClick={() => { }}></ImageButton>
+            <div className="flex items-center">
+                <ImageButton src={removeIcon} width={35} height={35} onClick={() => { }}></ImageButton>
             </div>
         </div>
     );

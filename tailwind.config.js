@@ -5,7 +5,11 @@ export default {
     "./client/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Noto Sans Thai', 'Lato', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 }
