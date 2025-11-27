@@ -3,8 +3,10 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import productRoutes from './routes/products.js';
 import userRoutes from './routes/users.js';
+import attachmentRoutes from './routes/attachments.js';
+import storeRoutes from './routes/store.js';
 
-dotenv.config();    
+dotenv.config();
 
 const app = express();
 const PORT = 3000;
@@ -14,6 +16,8 @@ app.use(express.json());
 
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/attachments', attachmentRoutes);
+app.use('/api/stores', storeRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);

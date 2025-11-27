@@ -4,7 +4,7 @@ import ImageButton from "../common/ImageButton";
 import cartIcon from "../../assets/images/cart.png";
 import orderIcon from "../../assets/images/order_icon.png";
 
-export default function Header() {
+export default function Header({ store_name }) {
     const navigate = useNavigate();
 
     return (
@@ -12,7 +12,7 @@ export default function Header() {
             <div className="flex justify-between items-start">
                 <div className="flex-1">
                     <Text className="text-xs text-gray-600">ยินดีต้อนรับสู่ร้าน</Text>
-                    <Text className="text-lg font-bold text-black">KFG, Mum JokMok</Text>
+                    <Text className="text-lg font-bold text-black">{store_name}</Text>
                 </div>
                 <div className="flex gap-4 items-center">
                     <ImageButton src={orderIcon} width={30} height={30} onClick={() => { }}></ImageButton>
