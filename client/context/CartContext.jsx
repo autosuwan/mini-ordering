@@ -4,17 +4,42 @@ const CartContext = createContext();
 
 export function CartProvider({ children }) {
     const [cart, setCart] = useState([]);
+    const [customerInfo, setCustomerInfo] = useState({
+        name: '',
+        phone: '',
+        description: ''
+    });
+    const [storeId, setStoreId] = useState(null);
 
     useEffect(() => {
         const savedCart = localStorage.getItem('cart');
+        const savedCustomerInfo = localStorage.getItem('customerInfo');
+        const savedStoreId = localStorage.getItem('storeId');
+
         if (savedCart) {
             setCart(JSON.parse(savedCart));
+        }
+        if (savedCustomerInfo) {
+            setCustomerInfo(JSON.parse(savedCustomerInfo));
+        }
+        if (savedStoreId) {
+            setStoreId(savedStoreId);
         }
     }, []);
 
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cart));
     }, [cart]);
+
+    useEffect(() => {
+        localStorage.setItem('customerInfo', JSON.stringify(customerInfo));
+    }, [customerInfo]);
+
+    useEffect(() => {
+        if (storeId) {
+            localStorage.setItem('storeId', storeId);
+        }
+    }, [storeId]);
 
     const addToCart = (product, quantity = 1) => {
         setCart(prevCart => {
@@ -50,6 +75,10 @@ export function CartProvider({ children }) {
         });
     };
 
+    const updateCustomerInfo = (info) => {
+        setCustomerInfo(prev => ({ ...prev, ...info }));
+    };
+
     const updateQuantity = (productId, quantity) => {
         if (quantity <= 0) {
             removeFromCart(productId);
@@ -64,7 +93,10 @@ export function CartProvider({ children }) {
 
     const clearCart = () => {
         setCart([]);
+        setCustomerInfo({ name: '', phone: '', description: '' });
         localStorage.removeItem('cart');
+        localStorage.removeItem('customerInfo');
+        // Note: We usually don't clear storeId on clearCart unless the user is leaving the store
     };
 
     const getTotalItems = () => {
@@ -78,12 +110,16 @@ export function CartProvider({ children }) {
     return (
         <CartContext.Provider value={{
             cart,
+            customerInfo,
+            storeId,
+            setStoreId,
             addToCart,
             removeFromCart,
             updateQuantity,
             clearCart,
             getTotalItems,
-            getTotalPrice
+            getTotalPrice,
+            updateCustomerInfo
         }}>
             {children}
         </CartContext.Provider>

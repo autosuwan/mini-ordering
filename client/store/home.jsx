@@ -5,16 +5,23 @@ import ProductBox from '../components/customer/ProductBox';
 import useGetProducts from '../../src/hook/useGetProducts';
 import useGetStore from '../../src/hook/useGetStore';
 import { useCart } from '../context/CartContext';
-import { Alert } from "@heroui/react";
-import { useState } from 'react';
+import {Alert} from "@heroui/alert";
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 function Home() {
     const { store_id } = useParams();
     const navigate = useNavigate();
     const { products, loading, error } = useGetProducts(store_id || 1);
     const { store, loading: storeLoading, error: storeError } = useGetStore(store_id || 1);
-    const { addToCart, getTotalItems } = useCart();
+    const { addToCart, getTotalItems, setStoreId } = useCart();
     const [alert, setAlert] = useState(false);
+
+    useEffect(() => {
+        if (store_id) {
+            setStoreId(store_id);
+        }
+    }, [store_id, setStoreId]);
 
     const handleAddToCart = (product) => {
         addToCart(product, 1);
@@ -71,15 +78,21 @@ function Home() {
             </div>
 
             {alert && (
-                <div className="flex absolute top-0 right-0 items-center justify-center w-max px-5">
+                <motion.div
+                    initial={{ opacity: 0, y: 0 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                <div className="flex items-center justify-center w-full absolute bottom-0 px-5">
                     <div className="flex flex-col w-full">
                         {["success"].map((color) => (
-                            <div key={color} className="w-full flex items-center my-3 bg-[#F4E4A6] rounded-lg">
-                                <Alert color={color} title={`✅ เพิ่มสินค้าลงตะกร้า!`} />
-                            </div>
+                        <div key={color} className="w-full flex items-center my-3">
+                            <Alert color={color} title={`เพิ่มสินค้าลงตะกร้าแล้ว`} />
+                        </div>
                         ))}
                     </div>
                 </div>
+                </motion.div>
             )}
         </div>
     );

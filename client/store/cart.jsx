@@ -8,7 +8,7 @@ import { useCart } from '../context/CartContext';
 
 function Cart() {
     const navigate = useNavigate();
-    const { cart, removeFromCart, getTotalItems, getTotalPrice } = useCart();
+    const { cart, removeFromCart, getTotalItems, getTotalPrice, storeId } = useCart();
 
     return (
         <div className="bg-white px-4 py-3 ">
@@ -18,7 +18,7 @@ function Cart() {
             <div className="flex flex-col">
                 <div className="flex items-center justify-center py-6 w-full relative">
                     <div className="absolute left-5">
-                        <ImageButton src={backIcon} width={10} height={10} onClick={() => navigate(-1)}></ImageButton>
+                        <ImageButton src={backIcon} width={10} height={10} onClick={() => navigate(`/s/${storeId}`)}></ImageButton>
                     </div>
                     <div className="bg-[#D9F9FF] px-16 py-3 rounded-full">
                         <Text className="text-black font-normal">ตะกร้าสินค้า</Text>
