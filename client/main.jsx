@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { CartProvider } from './context/CartContext';
 import Home from './store/home';
 import Cart from './store/cart';
 import Information from './store/order/information';
@@ -17,7 +18,7 @@ import '@fontsource/noto-sans-thai/900.css';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
+    <CartProvider>
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Home />} />
@@ -28,5 +29,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                 <Route path="/bill" element={<Bill />} />
             </Routes>
         </BrowserRouter>
-    </React.StrictMode>
+    </CartProvider>
 );

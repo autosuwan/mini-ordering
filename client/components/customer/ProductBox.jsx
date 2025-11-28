@@ -3,8 +3,7 @@ import ImageButton from "../common/ImageButton";
 import addIcon from "../../assets/images/add_button.png";
 
 
-export default function StoreBox({ product_name, price, product_img }) {
-    // Use product_img URL or placeholder if not available
+export default function StoreBox({ product_name, price, product_img, onAdd }) {
     const imageUrl = product_img || 'https://via.placeholder.com/150?text=No+Image';
 
     return (
@@ -23,7 +22,7 @@ export default function StoreBox({ product_name, price, product_img }) {
                 </div>
             </div>
             <div className="flex items-center">
-                <ImageButton src={addIcon} width={35} height={35} onClick={() => { }}></ImageButton>
+                <ImageButton src={addIcon} width={35} height={35} onClick={onAdd}></ImageButton>
             </div>
         </div>
     );
