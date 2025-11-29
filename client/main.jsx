@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
+import { PaymentProvider } from './context/PaymentContext';
 import Home from './store/home';
 import Cart from './store/cart';
 import Information from './store/order/information';
@@ -19,15 +20,17 @@ import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <CartProvider>
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/s/:store_id" element={<Home />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/order/information" element={<Information />} />
-                <Route path="/order/payment" element={<Payment />} />
-                <Route path="/bill" element={<Bill />} />
-            </Routes>
-        </BrowserRouter>
+        <PaymentProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/s/:store_id" element={<Home />} />
+                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/order/information" element={<Information />} />
+                    <Route path="/order/payment" element={<Payment />} />
+                    <Route path="/bill/:order_id" element={<Bill />} />
+                </Routes>
+            </BrowserRouter>
+        </PaymentProvider>
     </CartProvider>
 );

@@ -10,11 +10,13 @@ export function CartProvider({ children }) {
         description: ''
     });
     const [storeId, setStoreId] = useState(null);
+    const [orderId, setOrderId] = useState(null);
 
     useEffect(() => {
         const savedCart = localStorage.getItem('cart');
         const savedCustomerInfo = localStorage.getItem('customerInfo');
         const savedStoreId = localStorage.getItem('storeId');
+        const savedOrderId = localStorage.getItem('orderId');
 
         if (savedCart) {
             setCart(JSON.parse(savedCart));
@@ -25,6 +27,11 @@ export function CartProvider({ children }) {
         if (savedStoreId) {
             setStoreId(savedStoreId);
         }
+
+        if (savedOrderId) {
+            setOrderId(savedOrderId);
+        }
+
     }, []);
 
     useEffect(() => {
@@ -40,6 +47,12 @@ export function CartProvider({ children }) {
             localStorage.setItem('storeId', storeId);
         }
     }, [storeId]);
+
+    useEffect(() => {
+        if (orderId) {
+            localStorage.setItem('orderId', orderId);
+        }
+    }, [orderId]);
 
     const addToCart = (product, quantity = 1) => {
         setCart(prevCart => {
@@ -113,6 +126,8 @@ export function CartProvider({ children }) {
             customerInfo,
             storeId,
             setStoreId,
+            orderId,
+            setOrderId,
             addToCart,
             removeFromCart,
             updateQuantity,

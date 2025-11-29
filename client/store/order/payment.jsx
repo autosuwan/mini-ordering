@@ -9,12 +9,15 @@ import { anyId } from 'promptparse/generate';
 import useGetStore from '../../src/hook/useGetStore';
 import useSlipVerify from '../../src/hook/useSlipVerify';
 import { validateSlip } from '../../validates/slipValidate';
+import { usePayment } from '../../context/PaymentContext';
+import useCreateOrderItem from '../../src/hook/useCreateOrderItem';
 
 function Payment() {
     const navigate = useNavigate();
-    const { cart, storeId } = useCart();
+    const { cart, storeId, customerInfo, setOrderId } = useCart();
     const [qrPayload, setQrPayload] = useState("");
     const { verify, loading: verifyLoading, error: verifyError } = useSlipVerify();
+    const { create: createOrderItem } = useCreateOrderItem();
 
     const { store, loading: storeLoading, error: storeError } = useGetStore(storeId);
 
@@ -49,6 +52,10 @@ function Payment() {
     if (storeLoading) return <Text className="text-center py-10">กำลังโหลดข้อมูลร้าน...</Text>;
     if (storeError || !store) return <Text className="text-center py-10 text-red-600">เกิดข้อผิดพลาดโหลดร้าน</Text>;
 
+    const { setPayment } = usePayment();
+
+
+
     const handleFileChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -58,19 +65,33 @@ function Payment() {
                 // Validate the slip
                 if (result) {
                     validateSlip(result, deposit, store.prompt_pay_id);
-                    navigate('/bill');
+                    setPayment(result); // Store payment data in context
+
+                    // Create order and get the created order with order_id
+                    const createdOrder = await createOrderItem({
+                        products: cart.map(product => ({
+                            product_id: product.id,
+                            quantity: product.quantity,
+                            price: product.price
+                        }))
+                    }, {
+                        customer_name: customerInfo?.name,
+                        customer_phone: customerInfo?.phone,
+                        note: customerInfo?.description,
+                        total_price: totalAmount,
+                        deposit: deposit,
+                        store_id: store.id
+                    });
+
+                    // Navigate to bill page with order_id
+                    if (createdOrder && createdOrder.order_id) {
+                        setOrderId(createdOrder.order_id);
+                        console.log(createdOrder.order_id);
+                        navigate(`/bill/${createdOrder.order_id}`);
+                    }
                 }
             } catch (e) {
                 console.error("Verification failed:", e);
-                // The error from validateSlip will be caught here and displayed by the hook's error state if we set it,
-                // but useSlipVerify sets error state internally on verify failure.
-                // Since validateSlip throws an error, we need to make sure the user sees it.
-                // We might need to manually set the error in the component if useSlipVerify doesn't handle external validation errors.
-                // However, useSlipVerify only handles errors from the API call.
-                // Let's alert for now or better, use a local error state if verifyError is only for API.
-                // Actually, let's just let the catch block handle it, but we need to display it.
-                // Since verifyError comes from the hook, we can't easily set it from here.
-                // We should probably wrap the validation inside the hook or handle the error display locally.
                 alert(e.message); // Simple feedback for validation error
             }
         }
@@ -114,7 +135,6 @@ function Payment() {
                     </div>
                 </div>
 
-                {/* ปุ่มส่งสลิป */}
                 <div className="flex flex-col items-center justify-center pt-8">
                     <label
                         htmlFor="slip"
