@@ -16,12 +16,19 @@ function Home() {
     const { store, loading: storeLoading, error: storeError } = useGetStore(store_id || 1);
     const { addToCart, getTotalItems, setStoreId } = useCart();
     const [alert, setAlert] = useState(false);
+    const [title, setTitle] = useState('ค้นหาร้านค้า');
+    const [inputId, setInputId] = useState('');
 
     useEffect(() => {
         if (store_id) {
             setStoreId(store_id);
+            setTitle('สินค้าในร้าน');
         }
-    }, [store_id, setStoreId]);
+    }, [store_id, setStoreId, setTitle]);
+
+    const handleChange = (e) => {
+        setInputId(`/s/${e.target.value}`);
+    };
 
     const handleAddToCart = (product) => {
         addToCart(product, 1);
@@ -34,19 +41,21 @@ function Home() {
 
     return (
         <div className="bg-white px-4 py-3 w-full min-h-screen">
-            <Header store_name={store.store_name} cart_length={getTotalItems()} />
+            {store_id && (
+                <Header store_name={store.store_name} cart_length={getTotalItems()} />
+            )}
 
             <div className="flex justify-center py-6">
                 <button className="bg-[#F4E4A6] px-16 py-3 rounded-full">
-                    <Text className="text-black font-normal">สินค้าในร้าน</Text>
+                    <Text className="text-black font-normal">{title}</Text>
                 </button>
             </div>
-
-            <div className="bg-white">
-                {loading && (
-                    <div className="text-center py-8">
-                        <Text className="text-gray-600">กำลังโหลดสินค้า...</Text>
-                    </div>
+            { store_id && (
+                <div className="bg-white">
+                    {loading && (
+                        <div className="text-center py-8">
+                            <Text className="text-gray-600">กำลังโหลดสินค้า...</Text>
+                        </div>
                 )}
 
                 {error && (
@@ -76,6 +85,17 @@ function Home() {
                     </>
                 )}
             </div>
+            )}
+            { !store_id && (
+                <div className="flex flex-row items-center justify-center gap-6 py-10">
+                    <div className="flex justify-center">
+                        <input onChange = {handleChange} className="border border-black rounded-full px-4 py-2" type="text" placeholder="Store ID" />
+                    </div>
+                    <div>
+                        <button onClick = {() => navigate(`${inputId}`)} className="bg-[#F4E4A6] px-5 py-2 rounded-full border border-black">ค้นหา</button>
+                    </div>
+                </div>
+            )}
 
             {alert && (
                 <motion.div
