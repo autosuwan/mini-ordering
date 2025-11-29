@@ -6,24 +6,26 @@ import backIcon from '../../assets/images/back_button.png';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { anyId } from 'promptparse/generate';
-import useGetStore from '../../../src/hook/useGetStore';
+import useGetStore from '../../src/hook/useGetStore';
+import useSlipVerify from '../../src/hook/useSlipVerify';
+import { validateSlip } from '../../validates/slipValidate';
 
 function Payment() {
     const navigate = useNavigate();
     const { cart, storeId } = useCart();
     const [qrPayload, setQrPayload] = useState("");
+    const { verify, loading: verifyLoading, error: verifyError } = useSlipVerify();
 
     const { store, loading: storeLoading, error: storeError } = useGetStore(storeId);
 
-    // คำนวณยอดรวมและมัดจำ
     const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const deposit = Math.round(totalAmount * 0.5 * 100) / 100; // มัดจำ 50% แบบ 2 ตำแหน่งทศนิยม
+    const deposit = Math.round(totalAmount * 0.5 * 100) / 100;
 
     useEffect(() => {
         if (store?.prompt_pay_id) {
             try {
                 const target = store.prompt_pay_id.replace(/[^0-9]/g, '');
-                let type = 'MSISDN'; // Default to Mobile
+                let type = 'MSISDN';
 
                 if (target.length === 13) {
                     type = 'NATID';
@@ -47,12 +49,38 @@ function Payment() {
     if (storeLoading) return <Text className="text-center py-10">กำลังโหลดข้อมูลร้าน...</Text>;
     if (storeError || !store) return <Text className="text-center py-10 text-red-600">เกิดข้อผิดพลาดโหลดร้าน</Text>;
 
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            try {
+                const result = await verify(file);
+
+                // Validate the slip
+                if (result) {
+                    validateSlip(result, deposit, store.prompt_pay_id);
+                    navigate('/bill');
+                }
+            } catch (e) {
+                console.error("Verification failed:", e);
+                // The error from validateSlip will be caught here and displayed by the hook's error state if we set it,
+                // but useSlipVerify sets error state internally on verify failure.
+                // Since validateSlip throws an error, we need to make sure the user sees it.
+                // We might need to manually set the error in the component if useSlipVerify doesn't handle external validation errors.
+                // However, useSlipVerify only handles errors from the API call.
+                // Let's alert for now or better, use a local error state if verifyError is only for API.
+                // Actually, let's just let the catch block handle it, but we need to display it.
+                // Since verifyError comes from the hook, we can't easily set it from here.
+                // We should probably wrap the validation inside the hook or handle the error display locally.
+                alert(e.message); // Simple feedback for validation error
+            }
+        }
+    };
+
     return (
         <div className="bg-white px-4 py-3 ">
             <Header />
 
             <div className="flex flex-col">
-                {/* Header ส่วนบน */}
                 <div className="flex items-center justify-center py-6 w-full relative">
                     <div className="absolute left-5">
                         <ImageButton
@@ -67,7 +95,6 @@ function Payment() {
                     </div>
                 </div>
 
-                {/* QR Code */}
                 <div className="flex flex-col items-center justify-center py-10 w-full gap-5">
                     <Text className="text-black font-normal">QR Code สำหรับชำระเงิน</Text>
 
@@ -88,13 +115,28 @@ function Payment() {
                 </div>
 
                 {/* ปุ่มส่งสลิป */}
-                <div className="flex justify-center pt-8">
-                    <button
-                        onClick={() => navigate('/bill')}
-                        className="bg-[#FFD7CC] px-16 py-3 rounded-full border-black border"
+                <div className="flex flex-col items-center justify-center pt-8">
+                    <label
+                        htmlFor="slip"
+                        className={`bg-[#FFD7CC] px-16 py-3 rounded-full border-black border cursor-pointer ${verifyLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
-                        <Text className="text-black font-normal">ส่งสลิป</Text>
-                    </button>
+                        <Text className="text-black font-normal">
+                            {verifyLoading ? "กำลังตรวจสอบ..." : "ส่งสลิป"}
+                        </Text>
+                    </label>
+                    <input
+                        type="file"
+                        id="slip"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        className="hidden"
+                        disabled={verifyLoading}
+                    />
+                    {verifyError && (
+                        <Text className="text-red-500 text-center mt-2 text-sm">
+                            {verifyError}
+                        </Text>
+                    )}
                 </div>
             </div>
         </div>

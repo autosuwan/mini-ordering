@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import useGetUsers from '../hook/useGetUsers';
+import useGetUsers from './src/hook/useGetUsers';
 import Text from './components/common/Text';
 import Header from './components/customer/Header';
 import ProductBox from './components/customer/ProductBox';

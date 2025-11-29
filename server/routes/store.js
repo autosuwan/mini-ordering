@@ -12,9 +12,6 @@ router.get('/:id', async (req, res) => {
             (s) => String(s.store_id) === String(store_id)
         );
 
-        console.log('Found store:', store);
-        console.log('======================');
-
         if (!store) {
             return res.status(404).json({ message: "Store not found" });
         }
