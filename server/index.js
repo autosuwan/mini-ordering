@@ -25,6 +25,10 @@ app.use('/api/easyslip', easyslipRoutes);
 app.use('/api/orderItems', orderItemRoutes);
 app.use('/api/order', orderRoutes);
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    });
+}
+
+export default app;
