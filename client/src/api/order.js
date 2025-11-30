@@ -16,6 +16,21 @@ export async function createOrder(order) {
     return await response.json();
 }
 
+export async function getOrders(store_id) {
+    const response = await fetch(`${prefix}/store/${store_id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch orders');
+    }
+
+    return await response.json();
+}
+
 export async function getOrder(id) {
     if (!id) throw new Error('Order ID is required');
 

@@ -6,6 +6,8 @@ import userRoutes from './routes/users.js';
 import attachmentRoutes from './routes/attachments.js';
 import storeRoutes from './routes/store.js';
 import easyslipRoutes from './easyslip/api/route.js';
+import orderItemRoutes from './routes/orderItems.js';
+import orderRoutes from './routes/order.js';
 
 dotenv.config();
 
@@ -20,6 +22,8 @@ app.use('/api/users', userRoutes);
 app.use('/api/attachments', attachmentRoutes);
 app.use('/api/stores', storeRoutes);
 app.use('/api/easyslip', easyslipRoutes);
+app.use('/api/orderItems', orderItemRoutes);
+app.use('/api/order', orderRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);

@@ -25,7 +25,7 @@ export default function Header({ store_name, cart_length }) {
                         src={orderIcon}
                         width={30}
                         height={30}
-                        onClick={() => { }}
+                        onClick={() => navigate('/searchBill')}
                     />
                     <div className="relative">
                         <ImageButton

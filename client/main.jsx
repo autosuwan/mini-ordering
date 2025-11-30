@@ -8,6 +8,9 @@ import Cart from './store/cart';
 import Information from './store/order/information';
 import Payment from './store/order/payment';
 import Bill from './store/bill';
+import SearchBill from './store/searchBill';
+import SellerHome from './store/seller/home';
+import SellerBill from './store/seller/bill';
 import '@fontsource/lato/300.css';
 import '@fontsource/lato/400.css';
 import '@fontsource/lato/700.css';
@@ -29,6 +32,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                     <Route path="/order/information" element={<Information />} />
                     <Route path="/order/payment" element={<Payment />} />
                     <Route path="/bill/:order_id" element={<Bill />} />
+                    <Route path="/searchBill" element={<SearchBill />} />
+                    <Route path="/seller/:store_id" element={<SellerHome />} />
+                    <Route path="/seller/:store_id/bill/:order_id" element={<SellerBill />} />
                 </Routes>
             </BrowserRouter>
         </PaymentProvider>

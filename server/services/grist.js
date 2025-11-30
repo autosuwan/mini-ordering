@@ -62,3 +62,21 @@ export const fetchTableData = async (tableName) => {
     return []; // ถ้า error ให้ส่ง array ว่างกลับไป
   }
 };
+
+// ฟังก์ชันเพิ่มข้อมูลลง Table
+export const addRecords = async (tableName, records) => {
+  try {
+    // Grist expects format: { records: [{ fields: { ... } }] }
+    const payload = {
+      records: records.map(record => ({ fields: record }))
+    };
+
+    const response = await gristClient.post(`${BASE_URL}/${tableName}/records`, payload);
+
+    // Response format: { records: [{ id: 1 }, { id: 2 }] }
+    return response.data.records.map(r => r.id);
+  } catch (error) {
+    console.error(`Error adding records to ${tableName}:`, error.response?.data || error.message);
+    throw error;
+  }
+};
