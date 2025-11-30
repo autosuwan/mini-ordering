@@ -34,12 +34,15 @@ const convertAttachmentToUrl = (attachment, tableName, recordId, columnName) => 
 // ฟังก์ชันดึงข้อมูลจาก Table
 export const fetchTableData = async (tableName) => {
   try {
+    console.log(`Fetching data from table: ${tableName}`);
+    console.log(`API URL: ${BASE_URL}/${tableName}/records`);
+
     const response = await gristClient.get(`${BASE_URL}/${tableName}/records`);
 
     // Grist ส่งข้อมูลมาซับซ้อน เราต้องแปลงให้ใช้ง่ายๆ
     // จาก: { records: [{ id: 1, fields: { name: "..." } }] }
     // เป็น: [{ id: 1, name: "..." }]
-    return response.data.records.map(record => {
+    const records = response.data.records.map(record => {
       const fields = { ...record.fields };
 
       // แปลง product_image attachment เป็น URL
@@ -57,9 +60,18 @@ export const fetchTableData = async (tableName) => {
         ...fields
       };
     });
+
+    console.log(`Successfully fetched ${records.length} records from ${tableName}`);
+    return records;
   } catch (error) {
-    console.error(`Error fetching ${tableName}:`, error.message);
-    return []; // ถ้า error ให้ส่ง array ว่างกลับไป
+    console.error(`Error fetching ${tableName}:`);
+    console.error('Error message:', error.message);
+    console.error('Error response:', error.response?.data);
+    console.error('Error status:', error.response?.status);
+    console.error('Full error:', error);
+
+    // Return empty array instead of throwing to prevent app crash
+    return [];
   }
 };
 
