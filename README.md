@@ -34,6 +34,13 @@ A streamlined, modern web-based ordering platform designed for small businesses.
 
 ## 📦 Getting Started
 
+### Web Demo Test 
+- [Link here!](https://mini-ordering.vercel.app)
+- Store ID : STOR00001
+- Order ID : b1tUbz
+
+> QR Code Generator API may expired
+
 ### Prerequisites
 
 - Node.js (v18 or higher recommended)
