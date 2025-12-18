@@ -2,6 +2,9 @@
 
 A streamlined, modern web-based ordering platform designed for small businesses. This project provides a complete solution for sellers to manage their products and orders, while offering customers a seamless checkout experience with integrated Thai PromptPay payments.
 
+> ⚠️ **Note/Disclaimer**: The APIs used in this project (specifically for external services like EasySlip or the Grist instance) may have expired. You will need to provide your own valid API keys in the `.env` file for the project to function correctly.
+---
+
 ## 🚀 Features
 
 - **Multi-Store Architecture**: Support for multiple distinct storefronts (`/s/:store_id`), allowing the platform to serve various sellers simultaneously..
