@@ -39,7 +39,7 @@ A streamlined, modern web-based ordering platform designed for small businesses.
 - Store ID : STOR00001
 - Order ID : b1tUbz
 
-> QR Code Generator API may expired
+> QR Code Verify API may expired
 
 ### Prerequisites
 
